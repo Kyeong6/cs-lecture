@@ -56,23 +56,18 @@ int main(int argc, char const *argv[])
         pid_t pid;
         pid = fork();
 
-        // fork 수행이 안 되었을 경우
-        if (pid == -1) {
-            perror("fork failed");
-            exit(EXIT_FAILURE);
-        }
-
         // parent 수행
-        else if (pid > 0) {
+        if (pid > 0) {
             close(new_socket);
         }
+        
         // child 수행
         else {
             char buffer[30000] = {0};
             valread = read( new_socket , buffer, 30000);
             printf("%s\n",buffer );
             // uncomment following line and connect many clients
-            // sleep(5);
+            sleep(5);
             write(new_socket , hello , strlen(hello));
             printf("-------------Hello message sent---------------");
             close(new_socket);
