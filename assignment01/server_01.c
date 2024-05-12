@@ -62,6 +62,10 @@ int main(int argc, char const *argv[])
             exit(EXIT_FAILURE);
         }
 
+        // parent 수행
+        if (pid > 0) {
+            close(new_socket);
+        }
 
         char buffer[30000] = {0};
         valread = read( new_socket , buffer, 30000);
