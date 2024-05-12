@@ -51,7 +51,18 @@ int main(int argc, char const *argv[])
             perror("In accept");
             exit(EXIT_FAILURE);
         }
-       
+        
+        // fork 수행
+        pid_t pid;
+        pid = fork();
+
+        // fork 수행이 안 되었을 경우
+        if (pid == -1) {
+            perror("fork failed");
+            exit(EXIT_FAILURE);
+        }
+
+
         char buffer[30000] = {0};
         valread = read( new_socket , buffer, 30000);
         printf("%s\n",buffer );
