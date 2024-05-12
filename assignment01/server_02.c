@@ -67,7 +67,16 @@ int main(int argc, char const *argv[])
             perror("In accept");
             exit(EXIT_FAILURE);
         }
-        
+        // thread 생성
+        pthread_t tid;
+        int *new_sock = malloc(1);
+        *new_sock = new_socket;
+        if(pthread_create(&tid, NULL, socket_connection, (void*) new_sock) < 0)
+        {
+            perror("not create thread");
+            return 1;
+        }
+        pthread_detach(tid);
     }
     return 0;
 }
