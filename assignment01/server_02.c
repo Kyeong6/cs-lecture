@@ -11,6 +11,21 @@
 // IF error: address in use then change the PORT number
 #define PORT 8090
 
+// thread에서 실행되며 client와 연결을 관리하는 함수
+void *socket_connection(void *socket_desc) {
+    int sock = *(int*)socket_desc;
+    char buffer[30000] = {0};
+    char *hello = "HTTP/1.1 200 OK\nContent-Type: text/plain" \
+                  "Content-Length: 20\n\nMy first web server!";
+    read(sock, buffer, 30000);
+    printf("%s\n", buffer);
+    sleep(5);
+    write(sock, hello, strlen(hello));
+    printf("-------------Hello message sent---------------\n");
+    close(sock);
+    free(socket_desc);
+    return 0;
+}
 
 int main(int argc, char const *argv[])
 {
@@ -52,15 +67,7 @@ int main(int argc, char const *argv[])
             perror("In accept");
             exit(EXIT_FAILURE);
         }
-       
-        char buffer[30000] = {0};
-        valread = read( new_socket , buffer, 30000);
-        printf("%s\n",buffer );
-        // uncomment following line and connect many clients
-        // sleep(5);
-        write(new_socket , hello , strlen(hello));
-        printf("-------------Hello message sent---------------");
-        close(new_socket);
+        
     }
     return 0;
 }
