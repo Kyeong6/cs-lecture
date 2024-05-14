@@ -11,6 +11,13 @@
 // IF error: address in use then change the PORT number
 #define PORT 8090
 
+// queue size 설정
+#define QUEUE_SIZE = 10
+
+// message buffer size 설정
+#define MESSAGE_BUFFER_SIZE = 150
+
+
 // thread에서 실행되며 client와 연결을 관리하는 함수
 void *socket_connection(void *socket_desc) {
     int sock = *(int*)socket_desc;
