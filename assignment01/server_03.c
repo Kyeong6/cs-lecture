@@ -5,6 +5,9 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <pthread.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
 
 
 // in your browser type: http://localhost:8090
