@@ -24,6 +24,7 @@ typedef struct {
 
 MessageQueue mq;
 
+// Queue 구조체 초기화
 void initialize_message_queue(MessageQueue* mq) {
     mq->head = 0;
     mq->tail = 0;
@@ -31,7 +32,7 @@ void initialize_message_queue(MessageQueue* mq) {
     printf("Message queue initialized.\n");
 }
 
-// Message queue 삽입
+// Message queue 넣기
 void insert(MessageQueue* mq, int client_sock) {
     if (mq->count < QUEUE_SIZE) {
         mq->client_sockets[mq->tail] = client_sock;
@@ -39,11 +40,11 @@ void insert(MessageQueue* mq, int client_sock) {
         mq->count++;
         printf("Client socket %d enqueued. Queue count: %d\n", client_sock, mq->count);
     } else {
-        // printf("Queue is full\n");
+        // printf("Queue is full\n");  
     }
 }
 
-// Message queue 제거
+// Message queue 빼오기
 int pop(MessageQueue* mq) {
     if (mq->count > 0) {
         int client_sock = mq->client_sockets[mq->head];
@@ -52,9 +53,10 @@ int pop(MessageQueue* mq) {
         printf("Client socket %d dequeued. Queue count: %d\n", client_sock, mq->count);
         return client_sock;
     }
-    // printf("Queue is empty\n");
-    return -1; // Queue is empty
+    // printf("Queue is empty\n");  
+    return -1;
 }
+
 
 // Server logic 구현
 void* server_logic(void* arg) {
@@ -62,7 +64,8 @@ void* server_logic(void* arg) {
     int sock;
     while (1) {
         while ((sock = pop(mq)) == -1) {
-            usleep(100000); // Sleep if no clients
+            // Sleep if no clients
+            usleep(100000); 
         }
         
         char buffer[30000] = {0};
@@ -77,13 +80,12 @@ void* server_logic(void* arg) {
 }
 
 // 비율에 따른 server logic 추가 및 제거 구현
-void adjust_server_logic(MessageQueue* mq, pthread_t* threads, int* active_threads) {
-    printf("Adjusting server logic based on current queue size...\n");
+void change_server_logic(MessageQueue* mq, pthread_t* threads, int* active_threads) {
     if (mq->count > 0.8 * QUEUE_SIZE && *active_threads < MAX_CLIENTS) {
         pthread_create(&threads[*active_threads], NULL, server_logic, (void*) mq);
         pthread_detach(threads[(*active_threads)++]);
         printf("New thread created. Total active threads: %d\n", *active_threads);
-    } else if (mq->count < 0.2 * QUEUE_SIZE && *active_threads > 1) {
+    } else if (mq->count <= 0.2 * QUEUE_SIZE && *active_threads > 1) {
         (*active_threads)--;
         printf("Reduced thread count. Total active threads: %d\n", *active_threads);
     }
@@ -128,7 +130,7 @@ int main() {
         }
         printf("New connection accepted: socket %d\n", new_socket);
         insert(&mq, new_socket);
-        adjust_server_logic(&mq, threads, &active_threads);
+        change_server_logic(&mq, threads, &active_threads);
     }
 
     return 0;
