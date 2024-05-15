@@ -84,10 +84,10 @@ void change_server_logic(MessageQueue* mq, pthread_t* threads, int* active_threa
     if (mq->count > 0.8 * QUEUE_SIZE && *active_threads < MAX_CLIENTS) {
         pthread_create(&threads[*active_threads], NULL, server_logic, (void*) mq);
         pthread_detach(threads[(*active_threads)++]);
-        printf("New thread created. Total active threads: %d\n", *active_threads);
+        printf("Created thread");
     } else if (mq->count <= 0.2 * QUEUE_SIZE && *active_threads > 1) {
         (*active_threads)--;
-        printf("Reduced thread count. Total active threads: %d\n", *active_threads);
+        printf("Reduced thread");
     }
 }
 
