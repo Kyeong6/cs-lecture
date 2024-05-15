@@ -19,24 +19,35 @@
 
 // Queue struct 정의
 typedef struct {
-    char* messages[QUEUE_SIZE]; // message 배열
-    int head; // message start index
-    int tail; // mesage end index
-    int count; // queue에 존재하는 message 수
+    char* messages[QUEUE_SIZE]; // message 저장 배열
+    int head; 
+    int tail; 
+    int count; 
 } MessageQueue;
 
-MessageQueue message_queue;
-
-void initialize_message_queue(MessageQueue* message_queue) {
-    message_queue->head = 0;
-    message_queue->tail = 0;
-    message_queue->count = 0;
+// Queue 초기화
+void initialize_message_queue(MessageQueue* mq) {
+    mq->head = 0;
+    mq->tail = 0;
+    mq->count = 0;
     for (int i = 0; i < QUEUE_SIZE; i++) {
-        message_queue->messages[i] = NULL;
+        mq->messages[i] = NULL;
     }
 }
 
-
+// Queue 메시지 추가
+void insert(MessageQueue* mq, const char* message) {
+    if (mq->count < QUEUE_SIZE) {
+        int nextTail = mq->tail;
+        // message 복사하여 저장
+        mq->messages[nextTail] = strdup(message);
+        // 순환 queue 구현 
+        mq->tail = (nextTail + 1) % QUEUE_SIZE;
+        mq->count++;
+    } else {
+        printf("full\n");
+    }
+}
 
 
 // thread에서 실행되며 client와 연결을 관리하는 함수
