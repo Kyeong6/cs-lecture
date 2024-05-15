@@ -19,6 +19,7 @@ void *socket_connection(void *socket_desc) {
                   "Content-Length: 20\n\nMy first web server!";
     read(sock, buffer, 30000);
     printf("%s\n", buffer);
+    // uncomment following line and connect many clients
     sleep(5);
     write(sock, hello, strlen(hello));
     printf("-------------Hello message sent---------------\n");

@@ -67,7 +67,8 @@ void* server_logic(void* arg) {
             // Sleep if no clients
             usleep(100000); 
         }
-        
+        // uncomment following line and connect many clients
+        sleep(5);
         char buffer[30000] = {0};
         char *response = "HTTP/1.1 200 OK\nContent-Type: text/plain;Content-Length: 20\n\nMy first web server!";
         read(sock, buffer, sizeof(buffer));
