@@ -49,6 +49,25 @@ void insert(MessageQueue* mq, const char* message) {
     }
 }
 
+// Queue 메시지 제거
+char* pop(MessageQueue* mq) {
+    if (mq->count > 0) {
+        int headIndex = mq->head;
+        char* message = mq->messages[headIndex];
+        // 참조 제거
+        mq->messages[headIndex] = NULL;
+        // 순환 queue 구현
+        mq->head = (headIndex + 1) % QUEUE_SIZE;
+        mq->count--;
+        return message;
+    } else {
+        printf("empty\n");
+        return NULL;
+    }
+}
+
+
+
 
 // thread에서 실행되며 client와 연결을 관리하는 함수
 void *socket_connection(void *socket_desc) {
