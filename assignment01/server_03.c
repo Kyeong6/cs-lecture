@@ -17,7 +17,7 @@
 // message buffer size 설정
 #define MESSAGE_BUFFER_SIZE 150
 
-// Queue 구현
+// Queue struct 정의
 typedef struct {
     char* messages[QUEUE_SIZE]; // message 배열
     int head; // message start index
@@ -25,8 +25,16 @@ typedef struct {
     int count; // queue에 존재하는 message 수
 } MessageQueue;
 
-// struct 선언
 MessageQueue message_queue;
+
+void initialize_message_queue(MessageQueue* message_queue) {
+    message_queue->head = 0;
+    message_queue->tail = 0;
+    message_queue->count = 0;
+    for (int i = 0; i < QUEUE_SIZE; i++) {
+        message_queue->messages[i] = NULL;
+    }
+}
 
 
 
