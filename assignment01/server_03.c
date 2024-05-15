@@ -12,10 +12,23 @@
 #define PORT 8090
 
 // queue size 설정
-#define QUEUE_SIZE = 10
+#define QUEUE_SIZE 10
 
 // message buffer size 설정
-#define MESSAGE_BUFFER_SIZE = 150
+#define MESSAGE_BUFFER_SIZE 150
+
+// Queue 구현
+typedef struct {
+    char* messages[QUEUE_SIZE]; // message 배열
+    int head; // message start index
+    int tail; // mesage end index
+    int count; // queue에 존재하는 message 수
+} MessageQueue;
+
+// struct 선언
+MessageQueue message_queue;
+
+
 
 
 // thread에서 실행되며 client와 연결을 관리하는 함수
