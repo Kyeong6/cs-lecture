@@ -15,7 +15,8 @@ pthread_mutex_t mutex_lock;
 
 // 노드 구조체 정의
 typedef struct Node {
-    int socket_fd;  // 클라이언트 소켓 파일 디스크립터
+    // 클라이언트 소켓 파일 디스크립터
+    int socket_fd;  
     struct Node* next;
 } Node;
 
@@ -32,7 +33,7 @@ void initialize_queue(Queue* queue) {
 }
 
 // 큐에 새로운 노드를 추가하는 함수
-void enqueue(Queue* queue, int socket) {
+void insert(Queue* queue, int socket) {
     Node* new_node = (Node*)malloc(sizeof(Node));
     new_node->socket_fd = socket;
     new_node->next = NULL;
@@ -47,7 +48,7 @@ void enqueue(Queue* queue, int socket) {
 }
 
 // 큐에서 노드를 제거하고 소켓을 반환하는 함수
-int dequeue(Queue* queue) {
+int pop(Queue* queue) {
     if (queue->front == NULL) {
         return -1; // 큐가 비어있음
     }
@@ -89,7 +90,7 @@ void *client_handler(void *arg) {
     int client_socket;
     while (queue_size >= 2 || (queue_size > 0 && active_threads > 1)) {
         pthread_mutex_lock(&mutex_lock);
-        client_socket = dequeue(&connection_queue);
+        client_socket = pop(&connection_queue);
         pthread_mutex_unlock(&mutex_lock);
 
         if (client_socket != -1) {
@@ -99,6 +100,7 @@ void *client_handler(void *arg) {
             valread = read(client_socket, buffer, 30000);
             printf("Thread %d received: %s\n", thread_id, buffer);
 
+            // uncomment following line and connect many clients
             sleep(5);
 
             sprintf(response, "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 20\n\nMy first web server!\n");
@@ -170,7 +172,8 @@ int main(int argc, char const *argv[]) {
         }
 
         pthread_mutex_lock(&mutex_lock);
-        enqueue(&connection_queue, client_socket); // 요청을 큐에 추가
+        // 요청을 큐에 추가
+        insert(&connection_queue, client_socket); 
         manage_server();
         pthread_mutex_unlock(&mutex_lock);
     }
