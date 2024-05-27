@@ -3,7 +3,7 @@
 ### 순서
 
 1. server.c를 컴파일하고 실행
-2. 웹브라우져를 통해 http://localhost:8090/로 접속 후 server.c의 sleep 주석을 uncomment한 후 여러 개의 동시접속을 수행(accesses.py 이용)
+2. 웹브라우져를 통해 http://localhost:8090/ 로 접속 후 server.c의 sleep 주석을 uncomment한 후 여러 개의 동시접속을 수행(accesses.py 이용)
 3. fork를 server.c에 추가하여 `sleep(5);` 가 존재하여도 여러 요청을 잘 처리할 수 있게 구현
 
 ### 설명
@@ -64,11 +64,11 @@ else구문으로 자식 프로세스의 fork의 반환값은 0이므로 `pid == 
 
 - server_01.c
 
-![alt text](images/1.png)
+![alt text](images/server_01.png)
 
 - accesses.py
 
-![alt text](images/2.png)
+![alt text](images/server_01_accesses.png)
 
 ---
 
@@ -186,11 +186,11 @@ while(1)
 
 - server_02.c
 
-![alt text](images/3.png)
+![alt text](images/server_02.png)
 
 - accesses.py
 
-![alt text](images/4.png)
+![alt text](images/server_02_accesses.png)
 
 ---
 
@@ -458,11 +458,11 @@ int main(int argc, char const *argv[]) {
 
 - server_03.c
 
-![alt text](images/5.png)
+![alt text](images/server_03.png)
 
 - accesses.py
 
-![alt text](images/6.png)
+![alt text](images/server_03_accesses.png)
 
 ### **결론**
 
