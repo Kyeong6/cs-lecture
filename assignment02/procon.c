@@ -3,6 +3,7 @@
 #include <semaphore.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define N_COUNTER 4 // the size of a shared buffer
 #define MILLI 1000  // time scale
@@ -85,6 +86,10 @@ int main() {
   pthread_t t[2]; // thread structure
   srand(time(NULL)); 
 
+  // time check
+  struct timespec start, end;
+  clock_gettime(CLOCK_MONOTONIC, &start); // start time
+
   pthread_mutex_init(&critical_section, NULL); // init mutex
 
   // init semaphore
@@ -103,6 +108,14 @@ int main() {
   sem_destroy(&semRead);
 
   pthread_mutex_destroy(&critical_section); // destroy mutex 
+
+  clock_gettime(CLOCK_MONOTONIC, &end); // end time
+
+  // calculate the elapsed time
+  double elapsed = (end.tv_sec - start.tv_sec) + 
+                   (end.tv_nsec - start.tv_nsec) / 1e9;
+  printf("Elapsed time: %.6f seconds\n", elapsed);
+  
   return 0;
 }
 
