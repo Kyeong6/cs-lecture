@@ -186,7 +186,7 @@ sem_destroy(&semWrite);, sem_destroy(&semRead); 각각의 해당하는 세마포
 
 ### 실행 결과
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/0c79766f-e6e5-47fb-bb1f-6711656123dd/12f024dc-00ff-4e67-b773-440a3f51f340/Untitled.png)
+<img width="173" alt="procon c 실행결과_01" src="https://github.com/Kyeong6/operating-system/assets/100195725/0ece478a-38d1-4534-ab74-e764556aa414">
 
 gcc procon.c; ./a.out 명령어로 실행한 결과 다음과 같은 결과를 얻었습니다. (MacOS이지만 정상적으로 작동하였습니다.)
 <br/></br>
@@ -329,11 +329,12 @@ time 라이브러리를 이용해 main() 함수에 추가하여 다음과 같은
 
 - pthread_mutex : Elapsed time: 0.467514 seconds
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/0c79766f-e6e5-47fb-bb1f-6711656123dd/edf70cfa-5859-49ae-b8c4-a02e03ff06e7/Untitled.png)
+<img width="187" alt="procon c time check" src="https://github.com/Kyeong6/operating-system/assets/100195725/f1739117-596f-46b8-bc8e-f4dae5e4de1b">
 
 - peterson algorithm : Elapsed time: 0.551858 seconds
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/0c79766f-e6e5-47fb-bb1f-6711656123dd/12858db0-294f-45a8-85d9-9b385a393b75/Untitled.png)
+<img width="187" alt="procon2 c time check" src="https://github.com/Kyeong6/operating-system/assets/100195725/2d35acec-3501-481d-936b-c9554d2cd47b">
+<br/></br>
 
 시간 차이(성능)의 원인은 다음과 같습니다.
 <br/></br>
@@ -365,14 +366,14 @@ time 라이브러리를 이용해 main() 함수에 추가하여 다음과 같은
 
 **page.c 컴파일 및 time 명령어와 함께 실행**
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/0c79766f-e6e5-47fb-bb1f-6711656123dd/53a2ef0b-0a53-42cb-8b66-93f130bdd9c2/Untitled.png)
+<img width="784" alt="page_size_01" src="https://github.com/Kyeong6/operating-system/assets/100195725/5aee7912-48aa-4845-a009-87b4aca9b7e7">
 
 time a./out {page_size}를 통해서 실행한 결과입니다.
 <br/></br>
 
 **실행시간의 변화 및 특정 값에서의 실행 시간 변화 확인**
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/0c79766f-e6e5-47fb-bb1f-6711656123dd/919ee850-4fd4-4d8b-bd69-1c9614e33c82/Untitled.png)
+<img width="784" alt="page_size_02" src="https://github.com/Kyeong6/operating-system/assets/100195725/885cbbe0-b11d-4863-a1af-9ff572be5cfe">
 
 2의 제곱으로 pagesize 값을 설정하여 실행시간의 변화를 확인했습니다.
 
@@ -393,7 +394,7 @@ getconf PAGESIZE
 
 위의 명령어를 통해 실제 페이지 크기를 확인한 후 해당 페이지 크기에 대한 실행시간은 다음과 같습니다.
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/0c79766f-e6e5-47fb-bb1f-6711656123dd/fa8852fe-7c74-4c70-afcc-c8dcf17aed55/Untitled.png)
+<img width="784" alt="page_size_03" src="https://github.com/Kyeong6/operating-system/assets/100195725/76c5a621-e5cc-464a-ab18-b745fc5a86c9">
 <br/></br>
 
 실제 페이지 크기인 16384를 얻고 인접한 값들로 실행시간을 수행한 결과 실제 페이지 크기에서 인접 값보다 실행 시간이 긴 것을 확인했습니다.
