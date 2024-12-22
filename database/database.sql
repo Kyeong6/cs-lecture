@@ -1,0 +1,192 @@
+-- 데이터베이스 생성
+CREATE DATABASE 박경준;
+
+-- 데이터베이스 선택
+USE 박경준;
+
+-- 기업 테이블 생성
+CREATE TABLE COMPANY
+(
+    COMPANY_ID      BIGINT(20)   NOT NULL AUTO_INCREMENT,
+    COMPANY_NAME    VARCHAR(255) UNIQUE NOT NULL,
+    COUNTRY         VARCHAR(255) NOT NULL,
+    WEBSITE_URL     VARCHAR(255) NOT NULL,
+    LOGO_URL        VARCHAR(255) NOT NULL,
+    CREATED_AT      DATETIME(6)  NOT NULL,
+    UPDATED_AT      DATETIME(6)  NOT NULL,
+    PRIMARY KEY (COMPANY_ID)
+) ENGINE=InnoDB;
+
+-- 블로그(글) 테이블 생성
+CREATE TABLE BLOG
+(
+    BLOG_ID         BIGINT(20)   NOT NULL AUTO_INCREMENT,
+    COMPANY_ID      BIGINT(20)   DEFAULT NULL,
+    TITLE           VARCHAR(255) NOT NULL,
+    CONTENT         TEXT        NOT NULL,
+    BLOG_URL        VARCHAR(255) UNIQUE NOT NULL,
+    PUBLISHED_DATE  DATETIME(6)  NOT NULL,
+    IS_FOREIGN      TINYINT(1)   NOT NULL DEFAULT 0,
+    CREATED_AT      DATETIME(6)  NOT NULL,
+    UPDATED_AT      DATETIME(6)  NOT NULL,
+    PRIMARY KEY (BLOG_ID),
+    FOREIGN KEY (COMPANY_ID) REFERENCES COMPANY (COMPANY_ID) ON DELETE RESTRICT
+) ENGINE=InnoDB;
+
+-- 번역 테이블 생성
+CREATE TABLE TRANSLATION
+(
+    BLOG_ID            BIGINT(20)   NOT NULL,
+    TRANSLATED_TITLE   VARCHAR(255) NOT NULL,
+    TRANSLATED_CONTENT TEXT         NOT NULL,
+    CREATED_AT         DATETIME(6)  NOT NULL,
+    UPDATED_AT         DATETIME(6)  NOT NULL,
+    PRIMARY KEY (BLOG_ID),
+    FOREIGN KEY (BLOG_ID) REFERENCES BLOG (BLOG_ID) ON DELETE CASCADE
+) ENGINE = InnoDB;
+
+-- 이미지 테이블 생성
+CREATE TABLE IMAGE
+(
+    IMAGE_ID     BIGINT(20)   NOT NULL AUTO_INCREMENT,
+    BLOG_ID      BIGINT(20)   DEFAULT NULL,
+    IMAGE_URL    VARCHAR(255) UNIQUE NOT NULL,
+    CREATED_AT   DATETIME(6)  NOT NULL,
+    UPDATED_AT   DATETIME(6)  NOT NULL,
+    PRIMARY KEY (IMAGE_ID),
+    FOREIGN KEY  (BLOG_ID) REFERENCES BLOG (BLOG_ID) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- 태그 테이블 생성
+CREATE TABLE TAG
+(
+    TAG_ID       BIGINT(20)   NOT NULL AUTO_INCREMENT,
+    TAG_TYPE     VARCHAR(255) NOT NULL,
+    CREATED_AT   DATETIME(6)  NOT NULL,
+    UPDATED_AT   DATETIME(6)  NOT NULL,
+    PRIMARY KEY (TAG_ID)
+) ENGINE = InnoDB;
+
+-- BLOG / TAG 관계 테이블 생성
+CREATE TABLE BLOG_TAG
+(
+    BLOG_TAG_ID  BIGINT(20)   NOT NULL AUTO_INCREMENT,
+    BLOG_ID      BIGINT(20)   DEFAULT NULL,
+    TAG_ID       BIGINT(20)   DEFAULT NULL,
+    CREATED_AT   DATETIME(6)  NOT NULL,
+    UPDATED_AT   DATETIME(6)  NOT NULL,
+    PRIMARY KEY (BLOG_TAG_ID),
+    FOREIGN KEY (BLOG_ID) REFERENCES BLOG (BLOG_ID) ON DELETE CASCADE,
+    FOREIGN KEY (TAG_ID) REFERENCES TAG (TAG_ID) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- 사용자 테이블 생성
+CREATE TABLE USER
+(
+    USER_ID       BIGINT(20)   NOT NULL AUTO_INCREMENT,
+    USER_NAME     VARCHAR(255) UNIQUE NOT NULL,
+    EMAIL         VARCHAR(255) UNIQUE NOT NULL,
+    IS_AGREED     TINYINT(1)   NOT NULL DEFAULT 0,
+    IS_SUBSCRIBED TINYINT(1)   NOT NULL DEFAULT 0,
+    CREATED_AT    DATETIME(6)  NOT NULL,
+    UPDATED_AT    DATETIME(6)  NOT NULL,
+    PRIMARY KEY (USER_ID)
+) ENGINE=InnoDB;
+
+-- COMPANY 데이터 삽입
+INSERT INTO COMPANY (COMPANY_NAME, COUNTRY, WEBSITE_URL, LOGO_URL, CREATED_AT, UPDATED_AT)
+VALUES 
+('카카오', 'Korea', 'https://kakaocorp.com', 'https://kakaocorp.com/logo.png', NOW(), NOW()),
+('네이버', 'Korea', 'https://naver.com', 'https://naver.com/logo.png', NOW(), NOW()),
+('Meta', 'USA', 'https://about.meta.com/ko/', 'https://about.meta.com/ko/logo.png', NOW(), NOW());
+
+-- BLOG 데이터 삽입
+INSERT INTO BLOG (COMPANY_ID, TITLE, CONTENT, BLOG_URL, PUBLISHED_DATE, IS_FOREIGN, CREATED_AT, UPDATED_AT)
+VALUES 
+(1, 'API 설계란?', '본문은 어떻게 하면 API를 잘 통합하고 설계할 수 있을지에 대한 내용을 설명합니다.', 'https://kakaocorp.com/api-guide', '2024-11-11 12:00:00', 0, NOW(), NOW()),
+(2, '좋은 데이터베이스 설계란?', '본문은 어떻게 하면 데이터베이스 설계를 잘 할 수 있을지에 대한 내용을 설명합니다.', 'https://naver.com/data-architect', '2024-11-15 09:30:00', 0, NOW(), NOW()),
+(3, 'Advancements in AI', 'Exploring the latest trends in AI research.', 'https://about.meta.com/ko/ai-trends', '2024-11-22 14:00:00', 1, NOW(), NOW());
+
+-- TRANSLATION 데이터 삽입
+INSERT INTO TRANSLATION (BLOG_ID, TRANSLATED_TITLE, TRANSLATED_CONTENT, CREATED_AT, UPDATED_AT)
+VALUES 
+(3, 'AI 발전', 'AI 연구의 최신 동향을 탐구합니다.', NOW(), NOW());
+
+-- IMAGE 데이터 삽입
+INSERT INTO IMAGE (BLOG_ID, IMAGE_URL, CREATED_AT, UPDATED_AT)
+VALUES 
+(1, 'https://kakaocorp.com/images/api-guide.jpg', NOW(), NOW()),
+(2, 'https://naver.com/images/data-architect.jpg', NOW(), NOW()),
+(3, 'https://about.meta.com/ko/images/ai-trends.jpg', NOW(), NOW());
+
+-- TAG 데이터 삽입
+INSERT INTO TAG (TAG_TYPE, CREATED_AT, UPDATED_AT)
+VALUES 
+('API', NOW(), NOW()),
+('BE', NOW(), NOW()),
+('AI', NOW(), NOW());
+
+-- BLOG_TAG 데이터 삽입
+INSERT INTO BLOG_TAG (BLOG_ID, TAG_ID, CREATED_AT, UPDATED_AT)
+VALUES 
+(1, 1, NOW(), NOW()), 
+(2, 2, NOW(), NOW()), 
+(3, 3, NOW(), NOW());
+
+-- USER 데이터 삽입
+INSERT INTO USER (USER_NAME, EMAIL, IS_AGREED, IS_SUBSCRIBED, CREATED_AT, UPDATED_AT)
+VALUES 
+('박경준', 'kyeongjun@naver.com', 1, 1, NOW(), NOW()),
+('이도연', 'doyeon@gmail.com', 1, 0, NOW(), NOW()),
+('James', 'james@gamil.com', 0, 1, NOW(), NOW());
+
+-- COMPANY 테이블 확인
+SELECT * FROM COMPANY;
+
+-- BLOG 테이블 확인
+SELECT * FROM BLOG;
+
+-- TRANSLATION 테이블 확인
+SELECT * FROM TRANSLATION;
+
+-- IMAGE 테이블 확인
+SELECT * FROM IMAGE;
+
+-- TAG 테이블 확인
+SELECT * FROM TAG;
+
+-- BLOG_TAG 테이블 확인
+SELECT * FROM BLOG_TAG;
+
+-- USER 테이블 확인
+SELECT * FROM USER;
+
+-- 회사별 가장 최근 작성된 블로그 조회
+SELECT C.COMPANY_NAME, B.TITLE, B.PUBLISHED_DATE AS 최신게시물_업로드일자
+FROM COMPANY C
+JOIN BLOG B ON C.COMPANY_ID = B.COMPANY_ID
+WHERE B.PUBLISHED_DATE = (
+    SELECT MAX(B2.PUBLISHED_DATE)
+    FROM BLOG B2
+    WHERE B2.COMPANY_ID = C.COMPANY_ID
+);
+
+-- 특정 태그가 포함된 블로그 글 조회
+SELECT TITLE
+FROM BLOG
+WHERE BLOG_ID IN (
+    SELECT BT.BLOG_ID
+    FROM BLOG_TAG BT
+    WHERE BT.TAG_ID IN (
+        SELECT TAG_ID
+        FROM TAG
+        WHERE TAG_TYPE = 'AI'
+    )
+);
+
+-- 번역된 블로그의 회사별 개수
+SELECT C.COMPANY_NAME, COUNT(T.BLOG_ID) AS 번역된_블로그개수
+FROM COMPANY C
+LEFT JOIN BLOG B ON C.COMPANY_ID = B.COMPANY_ID
+LEFT JOIN TRANSLATION T ON B.BLOG_ID = T.BLOG_ID
+GROUP BY C.COMPANY_NAME;
